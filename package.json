@@ -24,7 +24,10 @@
     "nodemon": "^1.12.1"
   },
   "scripts": {
+    "prebuild": "rm -rf build/",
+    "build": "babel-node src/ -d build/",
     "watch": "nodemon --exec babel-node src/ --config nodemon.json",
-    "lint": "eslint src/"
+    "lint": "eslint src/",
+    "start": "node build/index.js"
   }
 }
