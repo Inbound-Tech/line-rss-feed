@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<articles>  //Mandatory
+  <UUID>String // request id, for operation tracking</UUID>  //Mandatory
+  <time>1457280000000</time>  //Mandatory
+
+  <article>  //At least one
+    <ID>String // request-article id, for updating article</ID>  //Mandatory
+    <nativeCountry>String // ISO 3166-1 alpha-2</nativeCountry>  //Mandatory
+    <language>String // ISO 639-1 language code</language>  //Mandatory
+
+    <startYmdtUnix>1457280000000</startYmdtUnix> //Mandatory
+    <endYmdtUnix>1457480000000</endYmdtUnix>  //Mandatory
+    <title>String // article title</title>  //Mandatory
+    <category>String</category>  //Mandatory
+    <subCategory>String</subCategory>  //Optional
+    <publishTimeUnix>1457480000000</publishTimeUnix>  //Mandatory
+    <contentType>0</contentType>
+    <thumbnail>String // relative file of thumbnail file</thumbnail>
+  //Optional
+    <contents> //Contain at least one of image, video, text. Can be multiple.
+      <image>
+        <title>String // image title</title>  //Optional
+        <description>String // image caption</description>  //Optional
+        <url>String // relative file path of image file</url>  //Mandatory
+        <thumbnail>String // relative file of thumbnail file</thumbnail>
+    //Optional
+      </image>
+
+      <text>
+        <content>  //Mandatory
+          <![CDATA html tag or pure text ]]>
+        </content>
+      </text>
+    </contents>
+
+    <sourceUrl>String // original source url</sourceUrl>  //Optional
+  </article>
+</articles>

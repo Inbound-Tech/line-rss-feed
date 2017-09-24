@@ -1,0 +1,13 @@
+{
+  "parser": "babel-eslint",
+  "extends": "airbnb-base",
+  "plugins": [
+    "import"
+  ],
+  "rules": {
+    "import/extensions": [2, { "mjs": "never" }],
+    "semi": 0,
+    "no-underscore-dangle": 0,
+    "no-else-return": 0
+  }
+}
