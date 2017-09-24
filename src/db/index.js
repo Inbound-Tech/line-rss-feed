@@ -35,6 +35,6 @@ export const setupDBConnection =
       })
   })
 
-const getDBConnection = (db) => dbConnection
+const getDBConnection = () => dbConnection
 
 export default getDBConnection

@@ -6,28 +6,32 @@ import getDBConnection from '../db'
 
 const router = Router()
 
-const getConditions = ({ dateAfter }) => {
-  const conditions = [
+const getConditions = ({ since }) => {
+  const baseConditions = [
     'post_type=\'post\'',
     'post_status=\'publish\'',
   ]
-  R.when(
+  const conditions = R.when(
     R.complement(R.isNil),
-    R.pipe(
-      d => `post_date >= ${(new Date(d)).toISOString()}`,
-      R.flip(R.append)(conditions),
+    R.tryCatch(
+      (d) => {
+        const sinceCondition = `post_date >= '${(new Date(d)).toISOString()}'`
+        baseConditions.push(sinceCondition)
+        return baseConditions
+      },
+      R.always(baseConditions),
     ),
-  )(dateAfter)
+  )(since)
   return conditions.join(' and ')
 }
 
 const getRawSQLQuery = ({
-  limit = 25, offset = 0, dateAfter,
+  limit = 25, offset = 0, since,
 }) =>
   `
     SELECT id, post_title, post_content, post_date, guid
     FROM wp_posts
-    WHERE ${getConditions({ dateAfter })}
+    WHERE ${getConditions({ since })}
     ORDER BY post_date DESC
     LIMIT ${limit}
     OFFSET ${offset};
@@ -35,9 +39,10 @@ const getRawSQLQuery = ({
 
 router.get('/', (req, res) => {
   const dbConnection = getDBConnection()
+  const { since } = req.query
   dbConnection
     .query(
-      getRawSQLQuery({ limit: 10, dateAfter: '2017-09-01' }),
+      getRawSQLQuery({ limit: 10, since }),
       { type: sequelize.QueryTypes.SELECT },
     )
     .then((results) => {
@@ -48,7 +53,7 @@ router.get('/', (req, res) => {
         .send(xml)
     })
     .catch((err) => {
-      console.log(err)
+      // console.log(err)
       res.status(500).send({ message: 'fail', err })
     })
 })

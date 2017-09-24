@@ -8,13 +8,11 @@ const app = express()
 const port = process.env.PORT || 3000
 
 
+/* eslint-disable no-console */
 setupDBConnection()
   .then(() => {
-    // dynamic import
-    // eslint-disable-next-line
     app.use(bodyParser.json())
     app.use('/', apis)
-    /* eslint-disable no-console */
     app.listen(port, (err) => {
       if (err) {
         console.log(err)
@@ -26,7 +24,6 @@ ENV=${process.env.ENV}
 Server runs on http://localhost:${port}
     `)
     })
-    /* eslint-enable no-console */
   })
   .catch((err) => {
     console.log(err)
@@ -35,3 +32,4 @@ Server runs on http://localhost:${port}
 Please check your network or environment variable
   `)
   })
+/* eslint-enable no-console */
