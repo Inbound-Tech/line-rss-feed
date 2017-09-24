@@ -39,10 +39,10 @@ const getRawSQLQuery = ({
 
 router.get('/', (req, res) => {
   const dbConnection = getDBConnection()
-  const { since } = req.query
+  const { since, limit = 10 } = req.query
   dbConnection
     .query(
-      getRawSQLQuery({ limit: 10, since }),
+      getRawSQLQuery({ limit, since }),
       { type: sequelize.QueryTypes.SELECT },
     )
     .then((results) => {
