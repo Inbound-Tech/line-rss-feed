@@ -25,9 +25,9 @@
   },
   "scripts": {
     "prebuild": "rm -rf build/",
-    "build": "babel-node src/ -d build/",
+    "build": "babel src/ -d build/",
     "watch": "nodemon --exec babel-node src/ --config nodemon.json",
     "lint": "eslint src/",
-    "start": "node build/index.js"
+    "start": "NODE_ENV=production node build/index.js"
   }
 }

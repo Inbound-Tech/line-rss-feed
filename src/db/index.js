@@ -1,5 +1,5 @@
 import Sequelize from 'sequelize'
-import { DB_DATABASE, DB_USER, DB_PASSWORD, DB_HOST } from '../config'
+import { DB_DATABASE, DB_USER, DB_PASSWORD, DB_HOST, NODE_ENV } from '../config'
 
 let dbConnection
 
@@ -16,6 +16,7 @@ const initConnection = () => {
         min: 0,
         idle: 10000,
       },
+      logging: NODE_ENV !== 'production',
     },
   )
 }

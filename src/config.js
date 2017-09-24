@@ -6,4 +6,5 @@ export const {
   DB_DATABASE,
   DB_USER,
   DB_PASSWORD,
+  NODE_ENV,
 } = process.env
