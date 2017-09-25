@@ -1,8 +1,7 @@
 import R from 'ramda'
 import { Router } from 'express'
-import sequelize from 'sequelize'
 import getArticleXML from '../utils/getArticleXML'
-import getDBConnection from '../db'
+import { getDBConnection } from '../db'
 
 const router = Router()
 
@@ -38,13 +37,17 @@ const getRawSQLQuery = ({
   `
 
 router.get('/', (req, res) => {
-  const dbConnection = getDBConnection()
+  const sequelize = getDBConnection()
   const { since, limit = 10 } = req.query
-  dbConnection
-    .query(
+
+  return sequelize.transaction({ autocommit: true }, t =>
+    sequelize.query(
       getRawSQLQuery({ limit, since }),
-      { type: sequelize.QueryTypes.SELECT },
+      {
+        transaction: t,
+      },
     )
+  )
     .then((results) => {
       const xml = getArticleXML({ rawArticles: results })
       res
@@ -53,7 +56,6 @@ router.get('/', (req, res) => {
         .send(xml)
     })
     .catch((err) => {
-      // console.log(err)
       res.status(500).send({ message: 'fail', err })
     })
 })

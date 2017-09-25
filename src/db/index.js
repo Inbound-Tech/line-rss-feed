@@ -21,7 +21,7 @@ const initConnection = () => {
   )
 }
 
-export const setupDBConnection =
+const setupDBConnection =
   () => new Promise((resolve, reject) => {
     initConnection()
     dbConnection
@@ -38,4 +38,7 @@ export const setupDBConnection =
 
 const getDBConnection = () => dbConnection
 
-export default getDBConnection
+export default {
+  setupDBConnection,
+  getDBConnection,
+}
