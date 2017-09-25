@@ -11,16 +11,13 @@ const getConditions = ({ since }) => {
     'post_type=\'post\'',
     'post_status=\'publish\'',
   ]
-  const conditions = R.when(
-    R.complement(R.isNil),
-    R.tryCatch(
-      (d) => {
-        const sinceCondition = `post_date >= '${(new Date(d)).toISOString()}'`
-        baseConditions.push(sinceCondition)
-        return baseConditions
-      },
-      R.always(baseConditions),
-    ),
+  const conditions = R.tryCatch(
+    (d) => {
+      const sinceCondition = `post_date >= '${(new Date(d)).toISOString()}'`
+      baseConditions.push(sinceCondition)
+      return baseConditions
+    },
+    R.always(baseConditions),
   )(since)
   return conditions.join(' and ')
 }
