@@ -16,7 +16,7 @@ const initConnection = () => {
         min: 0,
         idle: 10000,
       },
-      logging: NODE_ENV !== 'production',
+      logging: () => NODE_ENV !== 'production',
     },
   )
 }

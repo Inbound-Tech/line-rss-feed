@@ -5,6 +5,8 @@
   "license": "MIT",
   "dependencies": {
     "body-parser": "^1.18.2",
+    "chalk": "^2.1.0",
+    "date-fp": "^5.0.3",
     "dotenv": "^4.0.0",
     "express": "^4.15.4",
     "mysql2": "^1.4.2",

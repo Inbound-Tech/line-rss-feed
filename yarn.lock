@@ -1162,6 +1162,12 @@ dashdash@^1.12.0:
   dependencies:
     assert-plus "^1.0.0"
 
+date-fp@^5.0.3:
+  version "5.0.3"
+  resolved "https://registry.yarnpkg.com/date-fp/-/date-fp-5.0.3.tgz#32b9b0b427b1c4b0391ade8eb191a9768ebb1c02"
+  dependencies:
+    lodash.curry "4.1.1"
+
 debug@2.6.8:
   version "2.6.8"
   resolved "https://registry.yarnpkg.com/debug/-/debug-2.6.8.tgz#e731531ca2ede27d188222427da17821d68ff4fc"
@@ -2187,6 +2193,10 @@ lodash.assign@^3.0.0:
 lodash.cond@^4.3.0:
   version "4.5.2"
   resolved "https://registry.yarnpkg.com/lodash.cond/-/lodash.cond-4.5.2.tgz#f471a1da486be60f6ab955d17115523dd1d255d5"
+
+lodash.curry@4.1.1:
+  version "4.1.1"
+  resolved "https://registry.yarnpkg.com/lodash.curry/-/lodash.curry-4.1.1.tgz#248e36072ede906501d75966200a86dab8b23170"
 
 lodash.defaults@^3.1.2:
   version "3.1.2"
