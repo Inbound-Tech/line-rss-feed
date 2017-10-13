@@ -33,6 +33,7 @@
     "build": "babel src/ -d build/",
     "watch": "nodemon --exec babel-node src/ --config nodemon.json",
     "lint": "eslint src/",
-    "start": "NODE_ENV=production node build/index.js"
+    "start": "NODE_ENV=production node build/index.js",
+    "deploy": "npm run build && NODE_ENV=production pm2 start build/index.js"
   }
 }
