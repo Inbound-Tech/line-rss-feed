@@ -7,15 +7,28 @@ import getArticleXML from '../utils/getArticleXML'
 
 const router = Router()
 
-const airtableUrl = `https://api.airtable.com/v0/appfa9WbsLI0kDmis/RSS?api_key=${AIRTABLE_API_KEY}&sort%5B0%5D%5Bfield%5D=post_date&sort%5B0%5D%5Bdirection%5D=desc&filterByFormula=%7BisActive%7D%3D1`
+const baseUrl = 'https://api.airtable.com/v0/appfa9WbsLI0kDmis'
+const params = `?api_key=${AIRTABLE_API_KEY}&sort%5B0%5D%5Bfield%5D=post_date&sort%5B0%5D%5Bdirection%5D=desc&filterByFormula=%7BisActive%7D%3D1`
 const generateHashWith = (input) => {
   const hash = crypto.createHash('sha256')
   hash.write(input)
   return hash.digest('base64')
 }
 
+const getAirtableUrl = source => `${baseUrl}/${source}${params}`
+
+const checkSource = R.ifElse(
+  R.equals('inner'),
+  R.always('inner'),
+  R.always('inbound'),
+)
+
 router.get('/', (req, res) => {
-  fetch(airtableUrl)
+  const { source = 'inbound' } = req.query
+
+  fetch(
+    getAirtableUrl(checkSource(source)),
+  )
     .then(response => response.json())
     .then(R.prop('records'))
     .then(R.pluck('fields'))
