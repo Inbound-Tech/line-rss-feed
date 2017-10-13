@@ -15,14 +15,14 @@ const commonStructure = ({
 
 const getArticle = ({
   id,
-  startYmdtUnix,
-  endYmdtUnix,
+  startYmdtUnix = 1457280000000, // 2016-03-06
+  endYmdtUnix = 4095273600000, // 2099-10-10
   post_title: title,
   category,
   subCategory,
   post_date: publishTimeUnix,
   post_content: content, // CDTA data: <![CDATA html tag or pure text ]]>
-  guid: sourceUrl,
+  url: sourceUrl,
 }) => ({
   article: [
     { id },

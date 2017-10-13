@@ -9,9 +9,12 @@
     "date-fp": "^5.0.3",
     "dotenv": "^4.0.0",
     "express": "^4.15.4",
+    "isomorphic-fetch": "^2.2.1",
+    "morgan": "^1.9.0",
     "mysql2": "^1.4.2",
     "ramda": "^0.24.1",
     "sequelize": "^4.10.3",
+    "uuid": "^3.1.0",
     "xml": "^1.0.1"
   },
   "devDependencies": {

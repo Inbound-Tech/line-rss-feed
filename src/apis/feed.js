@@ -1,59 +1,53 @@
 import R from 'ramda'
 import { Router } from 'express'
-import { QueryTypes } from 'sequelize'
+import fetch from 'isomorphic-fetch'
+import crypto from 'crypto'
+import { AIRTABLE_API_KEY } from '../config'
 import getArticleXML from '../utils/getArticleXML'
-import getDBConnection from '../db'
 
 const router = Router()
 
-const getConditions = ({ since }) => {
-  const baseConditions = [
-    'post_type=\'post\'',
-    'post_status=\'publish\'',
-  ]
-  const conditions = R.tryCatch(
-    (d) => {
-      const sinceCondition = `post_date >= '${(new Date(d)).toISOString()}'`
-      baseConditions.push(sinceCondition)
-      return baseConditions
-    },
-    R.always(baseConditions),
-  )(since)
-  return conditions.join(' and ')
+const airtableUrl = `https://api.airtable.com/v0/appfa9WbsLI0kDmis/RSS?api_key=${AIRTABLE_API_KEY}&sort%5B0%5D%5Bfield%5D=post_date&sort%5B0%5D%5Bdirection%5D=desc&filterByFormula=%7BisActive%7D%3D1`
+const generateHashWith = (input) => {
+  const hash = crypto.createHash('sha256')
+  hash.write(input)
+  return hash.digest('base64')
 }
 
-const getRawSQLQuery = ({
-  limit = 25, offset = 0, since,
-}) =>
-  `
-    SELECT id, post_title, post_content, post_date, guid
-    FROM wp_posts
-    WHERE ${getConditions({ since })}
-    ORDER BY post_date DESC
-    LIMIT ${limit}
-    OFFSET ${offset};
-  `
-
 router.get('/', (req, res) => {
-  const sequelize = getDBConnection()
-  const { since, limit = 10 } = req.query
+  fetch(airtableUrl)
+    .then(response => response.json())
+    .then(R.prop('records'))
+    .then(R.pluck('fields'))
+    .then((rawArticles) => {
+      const time = R.pipe(
+        R.path([0, 'post_date']),
+        R.ifElse(
+          R.isNil,
+          () => new Date(),
+          date => new Date(date),
+        ),
+        R.compose(String, Math.floor),
+      )(rawArticles)
 
-  return sequelize.transaction({ autocommit: true }, t =>
-    sequelize.query(
-      getRawSQLQuery({ limit, since }),
-      {
-        type: QueryTypes.SELECT,
-        transaction: t,
-      },
-    ).then((results) => {
-      const xml = getArticleXML({ rawArticles: results })
+      const uuid = generateHashWith(time)
+      return getArticleXML({
+        rawArticles,
+        uuid,
+        time,
+      })
+    })
+    .then(xml =>
       res
         .status(200)
         .contentType('application/xml')
-        .send(xml)
-    }))
+        .send(xml),
+    )
     .catch((err) => {
-      res.status(500).send({ message: 'fail', err })
+      console.log(err)
+      res
+        .status(500)
+        .send({ message: 'fail' })
     })
 })
 
