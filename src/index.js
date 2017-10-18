@@ -12,7 +12,7 @@ const port = process.env.PORT || 3000
 /* eslint-disable no-console */
 setupDBConnection()
   .then(() => {
-    app.use(morgan(':date[iso] :method :url :status :res[content-length] - :response-time ms'))
+    app.use(morgan(':method :url :status :res[content-length] - :response-time ms - :date[iso]'))
     app.use(bodyParser.urlencoded({ extended: false }))
     app.use(bodyParser.json())
 
