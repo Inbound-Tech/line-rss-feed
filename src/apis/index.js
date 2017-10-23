@@ -5,6 +5,6 @@ import feed from './feed'
 const router = Router()
 
 router.use('/articles', articles)
-router.use('/feed', feed)
+router.use('/', feed)
 
 export default router
