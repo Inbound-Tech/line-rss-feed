@@ -25,7 +25,7 @@ const getArticle = ({
   url: sourceUrl,
 }) => ({
   article: [
-    { id },
+    { ID: id },
     { startYmdtUnix },
     { endYmdtUnix },
     { nativeCountry: 'TW' },
