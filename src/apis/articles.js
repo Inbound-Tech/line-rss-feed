@@ -2,6 +2,8 @@ import R from 'ramda'
 import { Router } from 'express'
 import { QueryTypes } from 'sequelize'
 import getDBConnection from '../db'
+import mockupArticleHTML from '../mockup/mockupArticleHTML'
+import convertJSONtoTable from '../utils/convertJSONtoTable'
 
 const router = Router()
 
@@ -36,7 +38,7 @@ const getRawSQLQuery = ({
     OFFSET ${offset};
   `
 
-const makeQuery = db => (SQLConditions) =>
+const makeQuery = db => SQLConditions =>
   db.transaction({ autocommit: true }, t =>
     db.query(
       getRawSQLQuery(SQLConditions),
@@ -46,11 +48,7 @@ const makeQuery = db => (SQLConditions) =>
       },
     ),
   )
-const checkSource = R.ifElse(
-  R.equals('inner'),
-  R.always('inner'),
-  R.always('inbound'),
-)
+
 router.get('/', (req, res) => {
   const innerDB = getDBConnection('inner')
   const inboundDB = getDBConnection('inbound')
@@ -64,10 +62,12 @@ router.get('/', (req, res) => {
 
   return makeQuery(db)(SQLConditions)
     .then(R.flatten)
+    .then(R.map(({ guid, ...other }) => ({ ...other, url: guid })))
+    .then(results => mockupArticleHTML({ site: source, content: convertJSONtoTable(results) }))
     .then(results =>
       res
         .status(200)
-        .send(R.map(({ guid, ...other }) => ({ ...other, url: guid }))(results)),
+        .send(results),
     )
     .catch((err) => {
       res.status(500).send({ message: 'fail', err })
