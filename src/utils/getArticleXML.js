@@ -21,6 +21,7 @@ const getArticle = ({
   category,
   subCategory,
   post_date: publishTimeUnix,
+  update_date: updateTimeUnix,
   post_content: content, // CDTA data: <![CDATA html tag or pure text ]]>
   url: sourceUrl,
 }) => ({
@@ -34,6 +35,7 @@ const getArticle = ({
     { category },
     { subCategory },
     { publishTimeUnix },
+    { updateTimeUnix },
     { contentType: 0 },
     {
       contents: [{
@@ -54,6 +56,7 @@ const getArticleXML = ({
   const articles = R.pipe(
     R.map(R.evolve({
       post_date: d => Date.parse(new Date(d)),
+      update_date: d => Date.parse(new Date(d)),
       post_content: content => `<![CDATA ${content} ]]>`,
     })),
     R.map(getArticle),

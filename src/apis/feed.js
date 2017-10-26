@@ -34,16 +34,15 @@ router.get('/', (req, res) => {
     .then(R.pluck('fields'))
     .then((rawArticles) => {
       const time = R.pipe(
-        R.path([0, 'post_date']),
-        R.ifElse(
-          R.isNil,
-          () => new Date(),
-          date => new Date(date),
+        R.pluck('update_date'),
+        R.tryCatch(
+          R.reduce(R.maxBy(date => Math.floor(new Date(date))), 0),
+          () => String(new Date()),
         ),
-        R.compose(String, Math.floor),
+        R.compose(String, Math.floor, d => new Date(d)),
       )(rawArticles)
-
       const uuid = generateHashWith(time)
+
       return getArticleXML({
         rawArticles,
         uuid,

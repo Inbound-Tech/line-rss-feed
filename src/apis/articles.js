@@ -63,6 +63,7 @@ router.get('/', (req, res) => {
   return makeQuery(db)(SQLConditions)
     .then(R.flatten)
     .then(R.map(({ guid, ...other }) => ({ ...other, url: guid })))
+    .then(R.map(R.evolve({ post_content: R.replace(/\r\n/g, '<br/>') })))
     .then(results => mockupArticleHTML({ site: source, content: convertJSONtoTable(results) }))
     .then(results =>
       res
