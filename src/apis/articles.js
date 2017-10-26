@@ -52,7 +52,7 @@ const makeQuery = db => SQLConditions =>
 
 const parserHTMLContent =
   R.pipe(
-    R.replace(/\r\n/g, ''),
+    R.replace(/\r\n/g, '<br/>'),
     (content) => {
       const doc = new JSDOM(content)
       const nodes = doc.window.document.body.childNodes
@@ -65,6 +65,7 @@ const parserHTMLContent =
           }
         }, '')
     },
+    R.replace(/<br>/g, ''),
   )
 
 router.get('/', (req, res) => {
