@@ -1,6 +1,7 @@
 import R from 'ramda'
 import { Router } from 'express'
 import { QueryTypes } from 'sequelize'
+import { JSDOM } from 'jsdom'
 import getDBConnection from '../db'
 import mockupArticleHTML from '../mockup/mockupArticleHTML'
 import convertJSONtoTable from '../utils/convertJSONtoTable'
@@ -49,6 +50,23 @@ const makeQuery = db => SQLConditions =>
     ),
   )
 
+const parserHTMLContent =
+  R.pipe(
+    R.replace(/\r\n/g, ''),
+    (content) => {
+      const doc = new JSDOM(content)
+      const nodes = doc.window.document.body.childNodes
+      return R.values(R.fromPairs(Array.from(nodes.entries())))
+        .reduce((acc, cur) => {
+          if (cur.nodeName === '#text') {
+            return `${acc}<p>${cur.wholeText}</p>`
+          } else {
+            return `${acc}${cur.outerHTML}`
+          }
+        }, '')
+    },
+  )
+
 router.get('/', (req, res) => {
   const innerDB = getDBConnection('inner')
   const inboundDB = getDBConnection('inbound')
@@ -63,7 +81,7 @@ router.get('/', (req, res) => {
   return makeQuery(db)(SQLConditions)
     .then(R.flatten)
     .then(R.map(({ guid, ...other }) => ({ ...other, url: guid })))
-    .then(R.map(R.evolve({ post_content: R.replace(/\r\n/g, '<br/>') })))
+    .then(R.map(R.evolve({ post_content: parserHTMLContent })))
     .then(results => mockupArticleHTML({ site: source, content: convertJSONtoTable(results) }))
     .then(results =>
       res
