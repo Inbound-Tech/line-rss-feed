@@ -23,6 +23,7 @@ const getArticle = ({
   post_date: publishTimeUnix,
   update_date: updateTimeUnix,
   post_content: content, // CDTA data: <![CDATA html tag or pure text ]]>
+  author,
   url: sourceUrl,
 }) => ({
   article: [
@@ -44,6 +45,7 @@ const getArticle = ({
         }],
       }],
     },
+    { author },
     { sourceUrl },
   ],
 })
