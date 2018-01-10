@@ -28,7 +28,7 @@
 
       <text>
         <content>  //Mandatory
-          <![CDATA html tag or pure text ]]>
+          <![CDATA[ html tag or pure text ]]>
         </content>
       </text>
     </contents>

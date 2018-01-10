@@ -22,7 +22,7 @@ const getArticle = ({
   subCategory,
   post_date: publishTimeUnix,
   update_date: updateTimeUnix,
-  post_content: content, // CDTA data: <![CDATA html tag or pure text ]]>
+  post_content: content, // CDTA data: <![CDATA[ html tag or pure text ]]>
   author,
   url: sourceUrl,
 }) => ({
@@ -59,7 +59,7 @@ const getArticleXML = ({
     R.map(R.evolve({
       post_date: d => Date.parse(new Date(d)),
       update_date: d => Date.parse(new Date(d)),
-      post_content: content => `<![CDATA ${content} ]]>`,
+      post_content: content => `<![CDATA[ ${content} ]]>`,
     })),
     R.map(getArticle),
   )(rawArticles)
