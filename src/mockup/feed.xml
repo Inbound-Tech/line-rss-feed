@@ -32,7 +32,7 @@
         </content>
       </text>
     </contents>
-    <author>String</author>  //Optional
+
     <sourceUrl>String // original source url</sourceUrl>  //Optional
   </article>
 </articles>

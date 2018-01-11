@@ -35,6 +35,7 @@
     "watch": "nodemon --exec babel-node src/ --config nodemon.json",
     "lint": "eslint src/",
     "start": "NODE_ENV=production node build/index.js",
-    "deploy": "npm run build && NODE_ENV=production pm2 start build/index.js"
+    "deploy": "npm run build && NODE_ENV=production pm2 start build/index.js",
+    "pm2": "NODE_ENV=production pm2 start build/index.js --name=\"line-rss\""
   }
 }
