@@ -58,7 +58,7 @@ const getArticleXML = ({
     R.map(R.evolve({
       post_date: d => Date.parse(new Date(d)),
       update_date: d => Date.parse(new Date(d)),
-      post_content: content => `<![CDATA[ ${content} ]]>`,
+      post_content: content => `<![CDATA ${content} ]]>`,
     })),
     R.map(getArticle),
   )(rawArticles)
