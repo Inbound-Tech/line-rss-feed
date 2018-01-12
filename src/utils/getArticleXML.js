@@ -45,6 +45,7 @@ const getArticle = ({
         }],
       }],
     },
+    { author },
     { sourceUrl },
   ],
 })
