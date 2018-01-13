@@ -59,7 +59,8 @@ const getArticleXML = ({
     R.map(R.evolve({
       post_date: d => Date.parse(new Date(d)),
       update_date: d => Date.parse(new Date(d)),
-      post_content: content => `<![CDATA ${content} ]]>`,
+      // Use _cdata for <[!CDATA[...]]>> in node-xml, see https://github.com/dylang/node-xml/blob/master/readme.md#xmlobject
+      post_content: content => ({_cdata: `${content}`}),
     })),
     R.map(getArticle),
   )(rawArticles)
