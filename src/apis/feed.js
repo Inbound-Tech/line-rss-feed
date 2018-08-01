@@ -18,8 +18,7 @@ const generateHashWith = (input) => {
 const getAirtableUrl = source => `${baseUrl}/${source}${params}`
 
 const validSources = ['inner', 'inbound', 'insport']
-
-const checkSource = R.ifElse(
+const getValidSource = R.ifElse(
   R.contains(R.__, validSources),
   R.identity,
   R.always('inbound'),
@@ -29,7 +28,7 @@ router.get('/', (req, res) => {
   const { source = 'inbound' } = req.query
 
   fetch(
-    getAirtableUrl(checkSource(source)),
+    getAirtableUrl(getValidSource(source)),
   )
     .then(response => response.json())
     .then(R.prop('records'))

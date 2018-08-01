@@ -39,6 +39,6 @@ const dbConfigs = {
     dbPassword: DB_PASSWORD_LINE_RSS,
     logging: () => NODE_ENV !== 'production',
   },
-};
+}
 
-export default dbConfigs;
+export default dbConfigs
