@@ -69,15 +69,16 @@ const makeQuery = db => SQLConditions =>
 //   )
 
 router.get('/', (req, res) => {
-  const innerDB = getDBConnection('inner')
+  const validSources = ['inner', 'inbound', 'insport']
   const inboundDB = getDBConnection('inbound')
-  const SQLConditions = R.pick(['since', 'limit', 'offset', 'q'])(req.query)
   const { source = 'inbound' } = req.query
   const db = R.ifElse(
-    R.equals('inner'),
-    () => innerDB,
+    R.contains(R.__, validSources),
+    getDBConnection,
     () => inboundDB,
   )(source)
+
+  const SQLConditions = R.pick(['since', 'limit', 'offset', 'q'])(req.query)
 
   return makeQuery(db)(SQLConditions)
     .then(R.flatten)

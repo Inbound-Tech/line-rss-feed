@@ -17,9 +17,11 @@ const generateHashWith = (input) => {
 
 const getAirtableUrl = source => `${baseUrl}/${source}${params}`
 
+const validSources = ['inner', 'inbound', 'insport']
+
 const checkSource = R.ifElse(
-  R.equals('inner'),
-  R.always('inner'),
+  R.contains(R.__, validSources),
+  R.identity,
   R.always('inbound'),
 )
 
