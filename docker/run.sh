@@ -15,6 +15,6 @@ CONTAINER_NAME=line-rss-feed
 docker rm -f $CONTAINER_NAME
 
 docker run -d --name ${CONTAINER_NAME} \
--p 8081:5000 \
+-p 8082:5000 \
 -v $ROOT/envs/${env}.env:/app/.env \
 ${CONTAINER_NAME}:${TAG}
