@@ -17,4 +17,5 @@ docker rm -f $CONTAINER_NAME
 docker run -d --name ${CONTAINER_NAME} \
 -p 8082:5000 \
 -v $ROOT/envs/${env}.env:/app/.env \
+--restart always \
 ${CONTAINER_NAME}:${TAG}
